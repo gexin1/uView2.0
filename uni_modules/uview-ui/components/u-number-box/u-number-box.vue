@@ -249,7 +249,7 @@
 			},
 			// 输入框失去焦点
 			onBlur(event) {
-				if(this.isUseOnInput){
+				if(!this.isUseOnInput){
 					this.onInput(event);
 				}
 				this.$nextTick(()=>{
