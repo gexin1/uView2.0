@@ -104,6 +104,10 @@ export default {
         iconStyle: {
             type: [Object, String],
             default: uni.$u.props.numberBox.iconStyle
+        },
+        isUseOnInput:{
+            type:[Boolean],
+            default:true
         }
     }
 }

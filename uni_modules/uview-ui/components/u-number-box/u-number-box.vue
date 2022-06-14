@@ -38,7 +38,7 @@
 			    class="u-number-box__input"
 			    @blur="onBlur"
 			    @focus="onFocus"
-			    @input="onInput"
+			    @input="(e)=> isUseOnInput?onInput(e):''"
 			    type="number"
 			    :style="[inputStyle]"
 			/>
@@ -100,8 +100,8 @@
 	 * @property {String | Number}	cursorSpacing	指定光标于键盘的距离，避免键盘遮挡输入框，单位px （默认 100 ）
 	 * @property {Boolean}			disablePlus		是否禁用增加按钮 （默认 false ）
 	 * @property {Boolean}			disableMinus	是否禁用减少按钮 （默认 false ）
+	 * @property {Boolean}			isUseOnInput	是否禁用减少按钮 （默认 false ）
 	 * @property {Object ｜ String}	iconStyle		加减按钮图标的样式
-	 *
 	 * @event {Function}	onFocus	输入框活动焦点
 	 * @event {Function}	onBlur	输入框失去焦点
 	 * @event {Function}	onInput	输入框值发生变化
@@ -114,7 +114,7 @@
 		data() {
 			return {
 				// 输入框实际操作的值
-				currentValue: '',
+				currentValue: 0,
 				// 定时器
 				longPressTimer: null
 			}
@@ -249,15 +249,20 @@
 			},
 			// 输入框失去焦点
 			onBlur(event) {
-				// 对输入值进行格式化
-				const value = this.format(event.detail.value)
-				// 发出blur事件
-				this.$emit(
-					'blur',{
-						...event.detail,
-						name: this.name,
-					}
-				)
+				if(this.isUseOnInput){
+					this.onInput(event);
+				}
+				this.$nextTick(()=>{
+							// 对输入值进行格式化
+					const value = this.format(event.detail.value)
+					// 发出blur事件
+					this.$emit(
+						'blur',{
+							...event.detail,
+							name: this.name,
+						}
+					)
+				})
 			},
 			// 输入框值发生变化
 			onInput(e) {
